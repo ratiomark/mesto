@@ -13,15 +13,6 @@
     <header class="header page__header">
       <img src="./images/logo-mesto.svg" alt="Лого" class="header__logo">
     </header>
-    <div class="popup">
-      <form action="" class="popup__container">
-        <h4 class="popup__title">Редактировать профиль</h4>
-        <input type="text" class="input popup__name">
-        <input type="text" class="input popup__occupation">
-        <button class="popup__save-button button">Сохранить</button>
-        <button class="popup__close-button button"></button>
-      </form>
-    </div>
     <main class="main page__main">
       <section class="profile page__profile">
         <img src="https://i.pinimg.com/564x/54/4c/39/544c39c586e35138b524197bb40cd862.jpg" alt="Аватар пользователя"
@@ -29,55 +20,55 @@
         <div class="profile__info">
           <div class="profile__name-wrapper">
             <h1 class="profile__name">Sir de Muscaria</h1>
-            <button class="button profile__edit-button"><img src="./images/edit-button.svg" alt="Редактировать профиль"
-                class="profile__edit-icon"></button>
+            <button type="button" class="button profile__edit-button"><img src="./images/edit-button.svg"
+                alt="Редактировать профиль" class="profile__edit-icon"></button>
           </div>
           <h2 class="profile__occupation">Mushroomer and forest adventurer</h2>
         </div>
-        <button class="button button_type_add profile__new-card-button"><img src="./images/add-button.svg" alt=""
-            class="profile__add-icon"></button>
+        <button type="button" class="button button_type_add profile__new-card-button"><img src="./images/add-button.svg"
+            alt="" class="profile__add-icon"></button>
       </section>
       <section class="cards">
         <div class="card">
           <img src="https://i.pinimg.com/564x/14/46/8e/14468e41e4dc9c320eea11ad06cd7c3d.jpg" alt="" class="card__image">
           <div class="card__bottom-wrapper">
             <h3 class="card__title"></h3>
-            <button class="card__like-button"></button>
+            <button type="button" class="card__like-button"></button>
           </div>
         </div>
         <div class="card">
           <img src="https://i.pinimg.com/564x/14/46/8e/14468e41e4dc9c320eea11ad06cd7c3d.jpg" alt="" class="card__image">
           <div class="card__bottom-wrapper">
             <h3 class="card__title"></h3>
-            <button class="card__like-button"></button>
+            <button type="button" class="card__like-button"></button>
           </div>
         </div>
         <div class="card">
           <img src="https://i.pinimg.com/564x/14/46/8e/14468e41e4dc9c320eea11ad06cd7c3d.jpg" alt="" class="card__image">
           <div class="card__bottom-wrapper">
             <h3 class="card__title"></h3>
-            <button class="card__like-button"></button>
+            <button type="button" class="card__like-button"></button>
           </div>
         </div>
         <div class="card">
           <img src="https://i.pinimg.com/564x/14/46/8e/14468e41e4dc9c320eea11ad06cd7c3d.jpg" alt="" class="card__image">
           <div class="card__bottom-wrapper">
             <h3 class="card__title"></h3>
-            <button class="card__like-button"></button>
+            <button type="button" class="card__like-button"></button>
           </div>
         </div>
         <div class="card">
           <img src="https://i.pinimg.com/564x/14/46/8e/14468e41e4dc9c320eea11ad06cd7c3d.jpg" alt="" class="card__image">
           <div class="card__bottom-wrapper">
             <h3 class="card__title"></h3>
-            <button class="card__like-button"></button>
+            <button type="button" class="card__like-button"></button>
           </div>
         </div>
         <div class="card">
           <img src="https://i.pinimg.com/564x/14/46/8e/14468e41e4dc9c320eea11ad06cd7c3d.jpg" alt="" class="card__image">
           <div class="card__bottom-wrapper">
             <h3 class="card__title"></h3>
-            <button class="card__like-button"></button>
+            <button type="button" class="card__like-button"></button>
           </div>
         </div>
       </section>
@@ -85,6 +76,15 @@
     <footer class="footer">
       <p class="footer__copyright">© 2022 Mesto</p>
     </footer>
+    <div class="popup">
+      <form class="popup__container">
+        <h4 class="popup__title">Редактировать профиль</h4>
+        <input type="text" class="input popup__name">
+        <input type="text" class="input popup__occupation">
+        <button type="submit" class="popup__save-button button">Сохранить</button>
+        <button type="button" class="popup__close-button button"></button>
+      </form>
+    </div>
   </div>
   <script src="./scripts/index.js"></script>
 </body>
