@@ -39,3 +39,31 @@ function pressLike(event) {
   event.target.classList.toggle('card__like-button_active')
 }
 
+const profileName = document.querySelector('.profile__name');
+const profileOccupation = document.querySelector('.profile__occupation');
+const formElement = document.querySelector('.popup__container');
+const nameInput = formElement.querySelector('.popup__name');
+const jobInput = formElement.querySelector('.popup__occupation');
+
+formElement.addEventListener('submit', formSubmitHandler)
+function formSubmitHandler(evt) {
+  evt.preventDefault(); 
+  profileName.textContent = nameInput.value
+  profileOccupation.textContent = jobInput.value
+}
+
+const popupElement = document.querySelector('.popup');
+const editProfileButton = document.querySelector('.profile__edit-button');
+editProfileButton.addEventListener('click', openPopup)
+function openPopup() {
+  popupElement.classList.add('popup_active')
+  nameInput.value = profileName.textContent
+  jobInput.value = profileOccupation.textContent
+}
+
+const closePopupButton = document.querySelector('.popup__close-button');
+closePopupButton.addEventListener('click', closePopup);
+function closePopup() {
+  popupElement.classList.remove('popup_active')
+}
+

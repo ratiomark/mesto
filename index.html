@@ -13,7 +13,16 @@
     <header class="header page__header">
       <img src="./images/logo-mesto.svg" alt="Лого" class="header__logo">
     </header>
-    <main class="main">
+    <div class="popup">
+      <form action="" class="popup__container">
+        <h4 class="popup__title">Редактировать профиль</h4>
+        <input type="text" class="input popup__name">
+        <input type="text" class="input popup__occupation">
+        <button class="popup__save-button button">Сохранить</button>
+        <button class="popup__close-button button"></button>
+      </form>
+    </div>
+    <main class="main page__main">
       <section class="profile page__profile">
         <img src="https://i.pinimg.com/564x/54/4c/39/544c39c586e35138b524197bb40cd862.jpg" alt="Аватар пользователя"
           class="profile__avatar">
@@ -28,7 +37,7 @@
         <button class="button button_type_add profile__new-card-button"><img src="./images/add-button.svg" alt=""
             class="profile__add-icon"></button>
       </section>
-      <section class="cards page__cards">
+      <section class="cards">
         <div class="card">
           <img src="https://i.pinimg.com/564x/14/46/8e/14468e41e4dc9c320eea11ad06cd7c3d.jpg" alt="" class="card__image">
           <div class="card__bottom-wrapper">
@@ -74,7 +83,7 @@
       </section>
     </main>
     <footer class="footer">
-
+      <p class="footer__copyright">© 2022 Mesto</p>
     </footer>
   </div>
   <script src="script.js"></script>
