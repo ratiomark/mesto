@@ -1,0 +1,11 @@
+
+.profile__info {
+  grid-area: info;
+}
+@media screen and (min-width: 719px) {
+  .profile__info {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+}

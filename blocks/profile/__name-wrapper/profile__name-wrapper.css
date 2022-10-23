@@ -1,0 +1,5 @@
+
+.profile__name-wrapper {
+  display: flex;
+  gap: 10px;
+}

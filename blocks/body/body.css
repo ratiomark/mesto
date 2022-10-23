@@ -1,0 +1,15 @@
+
+.body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1;
+  color: #ffffff;
+  background-color: #000;
+  min-width: 320px;
+  max-width: 1280px;
+  margin: 0 auto;
+}

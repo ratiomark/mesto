@@ -1,0 +1,17 @@
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+@media screen and (min-width: 719px) {
+  .profile {
+    display: grid;
+    grid-template-areas: "ava info add";
+    grid-template-columns: -webkit-min-content fit-content(450px) auto;
+    grid-template-columns: min-content fit-content(450px) auto;
+    gap: 30px;
+    align-content: center;
+    align-items: center;
+  }
+}
