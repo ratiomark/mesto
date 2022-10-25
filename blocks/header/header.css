@@ -4,11 +4,13 @@
   width: 100%;
   padding-left: 27px;
   padding-bottom: 30px;
+  padding-top: 28px;
   border-bottom: 1px solid #545454;
 }
 @media screen and (min-width: 1024px) {
   .header {
     padding-left: 0px;
+    padding-top: 45px;
     padding-bottom: 41px;
   }
 }
