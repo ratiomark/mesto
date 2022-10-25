@@ -1,9 +1,9 @@
 
 .page__main {
-  padding-bottom: 48px;
+  margin-bottom: 48px;
 }
 @media screen and (min-width: 1024px) {
   .page__main {
-    padding-bottom: 66px;
+    margin-bottom: 66px;
   }
 }
