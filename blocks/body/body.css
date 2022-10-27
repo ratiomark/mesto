@@ -1,13 +1,11 @@
 
 .body {
-  /* удалил переопределения стилей на уровне элементов, там где это было возможно. */
+  /* у меня размер шрифта в элементах через Rem, line-height font-weight убрал, спасибо */
   box-sizing: border-box;
   padding: 0;
   margin: 0 auto;
   font-family: Inter, Arial, sans-serif;
-  font-weight: 400;
   font-size: 16px;
-  line-height: 1;
   color: #ffffff;
   background-color: #000;
   min-width: 320px;
