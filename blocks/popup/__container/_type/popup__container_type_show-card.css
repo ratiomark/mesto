@@ -1,0 +1,8 @@
+.popup__container_type_show-card {
+  box-sizing: border-box;
+  padding: 0;
+  width: max-content;
+  height: max-content;
+  background-color: transparent;
+  gap: 10px;
+}
