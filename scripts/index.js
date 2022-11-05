@@ -34,10 +34,11 @@ const newCardButton = document.querySelector('.profile__new-card-button');
 const listWithCards = document.querySelector(".cards__list");
 const templateCard = document.querySelector("#card-item");
 
+const openPopup = popup => popup.classList.add('popup_active');
+const closePopup = popup => popup.classList.remove('popup_active');
 
-function addInitialCards(card, placeForCard) {
-  placeForCard.append(card);
-}
+const addInitialCards = (card, placeForCard) => placeForCard.append(card);
+const addNewCard = (card, placeForCard) => placeForCard.prepend(card);
 
 function createCard(template, { name, link }) {
   const cardFromTemplate = template.content.cloneNode(true).querySelector('.card').cloneNode(true);
@@ -50,31 +51,29 @@ INITIAL_CARDS.forEach(element => {
   addInitialCards(createCard(templateCard, element), listWithCards)
 });
 
-function addNewCard(card, placeForCard) {
-  placeForCard.prepend(card);
-}
-
-const setDataInPopupProfileEdit = function (popupEditProfile) {
+const setDataInPopupProfileEdit = popupEditProfile => {
   const nameInput = popupEditProfile.querySelector('.popup__name');
   const occupationInput = popupEditProfile.querySelector('.popup__occupation');
   nameInput.value = profileName.textContent
   occupationInput.value = profileOccupation.textContent
 }
 
-const setDataFromProfileEditToPage = function (popupEditProfile) {
+const setDataFromProfileEditToPage = popupEditProfile => {
   profileName.textContent = popupEditProfile.querySelector('.popup__name').value;
   profileOccupation.textContent = popupEditProfile.querySelector('.popup__occupation').value;
 }
 
-const getDataOfNewCard = function (popupAddNewCard) {
+const getDataOfNewCard = popupAddNewCard => {
   const nameInput = popupAddNewCard.querySelector('.popup__name');
   const linkInput = popupAddNewCard.querySelector('.popup__link');
   return { name: nameInput.value, link: linkInput.value }
 }
 
-const clearInputsInPopup = function (popupAddNewCard) {
-  popupAddNewCard.querySelectorAll('input').forEach(input => input.value = '')
-}
+const clearInputsInPopup = popupAddNewCard => popupAddNewCard.querySelectorAll('input').forEach(input => input.value = '');
+const checkIsDeleteCardIcon = target => target.classList.contains('card__delete-icon');
+const removeCard = target => target.closest('.card').remove();
+const checkIsLikeIcon = target => target.classList.contains('card__like-button');
+const toggleLikeState = target => target.classList.toggle('card__like-button_active');
 
 function formSubmitHandler(evt) {
   evt.preventDefault();
@@ -90,16 +89,6 @@ function formSubmitNewCard(evt) {
   clearInputsInPopup(popupAddNewCard)
   closePopup(popupAddNewCard)
 }
-
-function openPopup(popup) {
-  popup.classList.add('popup_active')
-}
-
-function closePopup(popup) {
-  popup.classList.remove('popup_active')
-}
-
-
 
 editProfileButton.addEventListener('click', () => {
   openPopup(popupEditProfile);
@@ -120,4 +109,11 @@ newCardButton.addEventListener('click', () => {
   }, { once: true });
 });
 
-// newCardButton.addEventListener('click', openPopup);
+listWithCards.addEventListener('click', (evt) => {
+  const target = evt.target;
+  if (checkIsDeleteCardIcon(target)) {
+    removeCard(target)
+  } else if (checkIsLikeIcon(target)) {
+    toggleLikeState(target)
+  }
+});
