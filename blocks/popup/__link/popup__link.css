@@ -1,0 +1,8 @@
+
+.popup__link {
+  margin-bottom: 45px;
+}
+@media screen and (min-width: 719px) {
+.popup__link {
+  margin-bottom: 48px;
+}}

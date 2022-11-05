@@ -84,7 +84,7 @@
     <footer class="footer">
       <p class="footer__copyright">© 2022 Mesto</p>
     </footer>
-    <div class="popup">
+    <div class="popup popup_type_edit-profile">
       <div class="popup__container">
         <h4 class="popup__title">Редактировать профиль</h4>
         <form class="popup__form" name="profileEdit">
@@ -95,9 +95,23 @@
         <button type="button" class="popup__close-button button"></button>
       </div>
     </div>
+
+    <div class="popup popup_type_new-card">
+      <div class="popup__container">
+        <h4 class="popup__title">Новое место</h4>
+        <form class="popup__form" name="add-card">
+          <input type="text" placeholder="Название" class="input popup__name">
+          <input type="text" placeholder="Ссылка на картинку" class="input popup__link">
+          <button type="submit" class="popup__save-button button">Создать</button>
+        </form>
+        <button type="button" class="popup__close-button button"></button>
+      </div>
+    </div>
+
   </div>
   <template id="card-item">
     <li class="card">
+      <div class="card__delete-icon"></div>
       <img src="" alt="Картинка к карточке" class="card__image">
       <div class="card__bottom-wrapper">
         <h3 class="card__title">Tree Village</h3>
