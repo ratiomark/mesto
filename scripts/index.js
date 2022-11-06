@@ -1,4 +1,4 @@
-const INITIAL_CARDS = [
+const initialCards = [
   {
     name: 'Spore Forest',
     link: 'https://i.pinimg.com/564x/40/4d/fa/404dfaa0aa9cdbb0ebd8e70bed2ae9ad.jpg'
@@ -24,81 +24,54 @@ const INITIAL_CARDS = [
     link: 'https://i.pinimg.com/564x/14/46/8e/14468e41e4dc9c320eea11ad06cd7c3d.jpg'
   }
 ];
-
-// popups
+// popups and forms
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddNewCard = document.querySelector('.popup_type_new-card');
 const popupShowCard = document.querySelector('.popup_type_show-card');
+const formElementEditProfile = popupEditProfile.querySelector('.popup__container');
+const formElementAddNewCard = popupAddNewCard.querySelector('.popup__container');
 // buttons
 const editProfileButton = document.querySelector('.profile__edit-button');
 const newCardButton = document.querySelector('.profile__new-card-button');
+const closeButtons = document.querySelectorAll('.popup__close-button')
+// inputs
+const nameInput = popupEditProfile.querySelector('.popup__name');
+const occupationInput = popupEditProfile.querySelector('.popup__occupation');
+const nameInputNewCard = popupAddNewCard.querySelector('.popup__name');
+const linkInputNewCard = popupAddNewCard.querySelector('.popup__link');
 // other
-const listWithCards = document.querySelector(".cards__list");
-const templateCard = document.querySelector("#card-item");
 const profileName = document.querySelector('.profile__name');
 const profileOccupation = document.querySelector('.profile__occupation');
+const imgPopupShowCard = popupShowCard.querySelector('.popup__image');
+const descriptionPopupShowCard = popupShowCard.querySelector('.popup__image-description');
+const listWithCards = document.querySelector(".cards__list");
+const templateCard = document.querySelector("#card-item");
 
-// initial cards upload
-const addInitialCard = (card, placeForCard) => placeForCard.append(card);
-const createCard = (template, { name, link }) => {
-  const cardFromTemplate = template.content.cloneNode(true).querySelector('.card').cloneNode(true);
-  cardFromTemplate.querySelector(".card__image").src = link;
-  cardFromTemplate.querySelector(".card__title").textContent = name;
-  return cardFromTemplate
-}
-
-INITIAL_CARDS.forEach(element => {
-  addInitialCard(createCard(templateCard, element), listWithCards)
-});
-
-// popup mechanics
-const popupPlaceSetter = () => {
-  const popup = document.querySelector('.popup_active');
-  popup.style.top = `${window.pageYOffset}px`
-}
-
-const openPopup = popup => {
-  popup.classList.add('popup_active', "show")
-  popupPlaceSetter()
-  document.addEventListener('scroll', popupPlaceSetter)
-};
-
-const closePopup = popup => {
-  popup.classList.add('fade')
-  popup.classList.remove('show')
-  popup.addEventListener('animationend', () => {
-    popup.classList.remove('popup_active', 'fade')
-  }, { once: true });
-  document.removeEventListener('scroll', popupPlaceSetter)
-};
-
-const setDataInPopupProfileEdit = popupEditProfile => {
-  const nameInput = popupEditProfile.querySelector('.popup__name');
-  const occupationInput = popupEditProfile.querySelector('.popup__occupation');
+// popup functions
+const openPopup = popup => popup.classList.add('popup_active');
+const closePopup = popup => popup.classList.remove('popup_active');
+const clearInputsInPopup = popupAddNewCard => popupAddNewCard.querySelectorAll('input').forEach(input => input.value = '');
+const setDataInPopupProfileEdit = () => {
   nameInput.value = profileName.textContent
   occupationInput.value = profileOccupation.textContent
 }
 
-const setDataFromProfileEditToPage = popupEditProfile => {
-  profileName.textContent = popupEditProfile.querySelector('.popup__name').value;
-  profileOccupation.textContent = popupEditProfile.querySelector('.popup__occupation').value;
+const setDataFromProfileEditToPage = () => {
+  profileName.textContent = nameInput.value;
+  profileOccupation.textContent = occupationInput.value;
+}
+const setDataFromCardToPopup = ({ src, title }) => {
+  imgPopupShowCard.src = src;
+  descriptionPopupShowCard.textContent = title;
+}
+const getDataForNewCardFromUserInput = () => ({ name: nameInputNewCard.value, link: linkInputNewCard.value });
+const showCard = evt => {
+  setDataFromCardToPopup(getDataFromCard(evt.target))
+  openPopup(popupShowCard)
 }
 
-const getDataForNewCardFromUserInput = popupAddNewCard => {
-  const nameInput = popupAddNewCard.querySelector('.popup__name');
-  const linkInput = popupAddNewCard.querySelector('.popup__link');
-  return { name: nameInput.value, link: linkInput.value }
-}
-
-const addNewCard = (card, placeForCard) => placeForCard.prepend(card);
-const clearInputsInPopup = popupAddNewCard => popupAddNewCard.querySelectorAll('input').forEach(input => input.value = '');
-const removeCard = target => target.closest('.card').remove();
-const toggleLikeState = target => target.classList.toggle('card__like-button_active');
-const checkIsLikeIcon = target => target.classList.contains('card__like-button');
-const checkIsCardImage = target => target.classList.contains('card__image');
-const checkIsDeleteCardIcon = target => target.classList.contains('card__delete-icon');
-
-// functions for popup that shows card image and title
+const removeCard = evt => evt.target.closest('.card').remove();
+const toggleLikeState = evt => evt.target.classList.toggle('card__like-button_active');
 const getDataFromCard = target => {
   const card = target.closest('.card');
   const srcImage = card.querySelector('.card__image').src;
@@ -106,22 +79,34 @@ const getDataFromCard = target => {
   return { src: srcImage, title: titleCard }
 }
 
-const setDataFromCardToPopup = ({ src, title }) => {
-  popupShowCard.querySelector('.popup__image').src = src;
-  popupShowCard.querySelector('.popup__image-description').textContent = title;
+// initial cards upload
+const addInitialCard = (card, placeForCard) => placeForCard.append(card);
+const createCard = (template, { name, link }) => {
+  const cardFromTemplate = template.content.cloneNode(true).querySelector('.card').cloneNode(true);
+  cardFromTemplate.querySelector(".card__image").src = link;
+  cardFromTemplate.querySelector(".card__title").textContent = name;
+  cardFromTemplate.querySelector(".card__delete-icon").addEventListener('click', removeCard);
+  cardFromTemplate.querySelector(".card__like-button").addEventListener('click', toggleLikeState);
+  cardFromTemplate.querySelector(".card__image").addEventListener('click', showCard);
+  return cardFromTemplate
 }
 
+initialCards.forEach(cardData => {
+  addInitialCard(createCard(templateCard, cardData), listWithCards)
+});
+
+const addNewCard = (card, placeForCard) => placeForCard.prepend(card);
+
 //forms handlers  
-const formSubmitProfileEdit = evt => {
+const formSubmitProfileEdit = (evt) => {
   evt.preventDefault();
-  setDataFromProfileEditToPage(popupEditProfile)
+  setDataFromProfileEditToPage()
   closePopup(popupEditProfile)
 }
 
-const formSubmitNewCard = evt => {
+const formSubmitNewCard = (evt) => {
   evt.preventDefault();
-  const dataForNewCardFromUserInput = getDataForNewCardFromUserInput(popupAddNewCard)
-  const card = createCard(templateCard, dataForNewCardFromUserInput)
+  const card = createCard(templateCard, getDataForNewCardFromUserInput())
   addNewCard(card, listWithCards)
   clearInputsInPopup(popupAddNewCard)
   closePopup(popupAddNewCard)
@@ -129,34 +114,14 @@ const formSubmitNewCard = evt => {
 
 // main listeners
 editProfileButton.addEventListener('click', () => {
+  setDataInPopupProfileEdit()
   openPopup(popupEditProfile);
-  setDataInPopupProfileEdit(popupEditProfile)
-  const formElement = popupEditProfile.querySelector('.popup__container');
-  formElement.addEventListener('submit', formSubmitProfileEdit)
-  popupEditProfile.querySelector('.popup__close-button').addEventListener('click', () => {
-    closePopup(popupEditProfile)
-  }, { once: true });
 });
-
+formElementEditProfile.addEventListener('submit', formSubmitProfileEdit)
 newCardButton.addEventListener('click', () => {
   openPopup(popupAddNewCard);
-  const formElement = popupAddNewCard.querySelector('.popup__container');
-  formElement.addEventListener('submit', formSubmitNewCard)
-  popupAddNewCard.querySelector('.popup__close-button').addEventListener('click', () => {
-    closePopup(popupAddNewCard)
-  }, { once: true });
 });
-
-listWithCards.addEventListener('click', (evt) => {
-  const target = evt.target;
-  if (checkIsDeleteCardIcon(target)) {
-    removeCard(target)
-  } else if (checkIsLikeIcon(target)) {
-    toggleLikeState(target)
-  } else if (checkIsCardImage(target)) {
-    const dataFromCard = getDataFromCard(target)
-    setDataFromCardToPopup(dataFromCard)
-    openPopup(popupShowCard)
-    popupShowCard.querySelector('.popup__close-button').addEventListener('click', () => closePopup(popupShowCard), { once: true })
-  }
-});
+formElementAddNewCard.addEventListener('submit', formSubmitNewCard)
+closeButtons.forEach(i => i.addEventListener('click', () => {
+  closePopup(i.closest('.popup_active'))
+}))
