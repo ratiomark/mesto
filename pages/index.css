@@ -10,8 +10,6 @@
 @import url("../blocks/main/main.css");
 @import url("../blocks/button/button.css");
 @import url("../blocks/button/_type/button_type_add.css");
-@import url("../blocks/fade/fade.css");
-@import url("../blocks/show/show.css");
 @import url("../blocks/profile/profile.css");
 @import url("../blocks/profile/__avatar/profile__avatar.css");
 @import url("../blocks/profile/__info/profile__info.css");

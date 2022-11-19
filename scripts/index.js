@@ -112,6 +112,39 @@ const formSubmitNewCard = (evt) => {
   closePopup(popupAddNewCard)
 }
 
+const hasInvalidInputs = (inputList) => inputList.some(inputElem => !inputElem.validity.valid);
+// const validateInput = (inputElem, ) => {
+// validationMessage
+// }
+function validateForm(formElement, inputList, buttonSubmit) {
+  if (hasInvalidInputs(inputList)) {
+    buttonSubmit.classList.add('DISABLED')
+  } else {
+    buttonSubmit.classList.remove('DISABLED')
+  }
+}
+const enableValidation = (formSelector, inputSelector, buttonSelector) => {
+  const forms = Array.from(document.querySelectorAll(formSelector));
+  console.log(forms)
+
+  forms.forEach(formElement => {
+    const inputList = Array.from(formElement.querySelectorAll(inputSelector));
+    const buttonSubmit = formElement.querySelector(buttonSelector)
+    validateForm(formElement, inputList, buttonSubmit)
+    formElement.addEventListener('submit', (e) => {
+      e.preventDefault()
+    });
+    console.log(inputList)
+
+    inputList.forEach(inputElem => {
+      inputElem.addEventListener('input', (e) => {
+        // validateInput()
+      });
+    })
+  })
+}
+enableValidation('.popup__form', '.input', '.popup__save-button')
+
 // main listeners
 editProfileButton.addEventListener('click', () => {
   setDataInPopupProfileEdit()
