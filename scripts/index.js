@@ -61,39 +61,38 @@ const openPopup = popup => {
   document.addEventListener('keydown', closePopupByEsc)
 };
 
+const closePopupChain = (popup, buttonFlag = false) => {
+  hideErrorState(popup, buttonFlag)
+  clearInputsInPopup(popup)
+  document.removeEventListener('keydown', closePopupByEsc)
+  popup.classList.remove('popup_active');
+}
+
 const closePopup = popup => {
   // popup type defines closing behavior 
   switch (true) {
-    // show card
+    //show card
     case popup.classList.contains('popup_type_show-card'):
       document.removeEventListener('keydown', closePopupByEsc)
       popup.classList.remove('popup_active');
       break;
     //add new card
     case popup.classList.contains('popup_type_new-card'):
-      hideErrorState(popup)
-      clearInputsInPopup(popup)
-      document.removeEventListener('keydown', closePopupByEsc)
-      popup.classList.remove('popup_active');
-      disableButton(popup)
+      closePopupChain(popup, true)
       break
     //edit profile
     default:
-      hideErrorState(popup)
-      clearInputsInPopup(popup)
-      document.removeEventListener('keydown', closePopupByEsc)
-      popup.classList.remove('popup_active');
+      closePopupChain(popup)
   }
 };
 
-const hideErrorState = (popup) => {
+const hideErrorState = (popup, buttonFlag = false) => {
   popup.querySelectorAll('.message-error').forEach(i => i.textContent = "");
   popup.querySelectorAll('.input').forEach(input => input.classList.remove('input_error'));
-  popup.querySelector('button').disabled = false;
+  popup.querySelector('button').disabled = buttonFlag;
 }
 
 const clearInputsInPopup = popup => popup.querySelector('.popup__form').reset();
-const disableButton = popupAddNewCard => popupAddNewCard.querySelector('.popup__save-button').disabled = true;
 const setDataInPopupProfileEdit = () => {
   nameInput.value = profileName.textContent
   occupationInput.value = profileOccupation.textContent
