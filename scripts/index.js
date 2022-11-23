@@ -1,36 +1,11 @@
-const initialCards = [
-  {
-    name: 'Spore Forest',
-    link: 'https://i.pinimg.com/564x/40/4d/fa/404dfaa0aa9cdbb0ebd8e70bed2ae9ad.jpg'
-  },
-  {
-    name: 'Lair of Behemonths',
-    link: 'https://i.pinimg.com/564x/91/8a/59/918a594b039b8da22538985978149b75.jpg'
-  },
-  {
-    name: 'The Great Tree',
-    link: 'https://i.pinimg.com/564x/68/5b/cb/685bcbccbc86257753133fea7a198f6b.jpg'
-  },
-  {
-    name: 'Mushroom Forest',
-    link: 'https://i.pinimg.com/564x/0d/33/bb/0d33bb844a836176c20c0d85de7c2235.jpg'
-  },
-  {
-    name: 'Tree Village',
-    link: 'https://i.pinimg.com/564x/50/1a/60/501a607d9ad6aae8fc55857413c46556.jpg'
-  },
-  {
-    name: 'Dark Path',
-    link: 'https://i.pinimg.com/564x/14/46/8e/14468e41e4dc9c320eea11ad06cd7c3d.jpg'
-  }
-];
+import initialCards from "./initialCards.js";
 // popups and forms
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddNewCard = document.querySelector('.popup_type_new-card');
 const popupShowCard = document.querySelector('.popup_type_show-card');
 const popupList = document.querySelectorAll('.popup');
-const formElementEditProfile = popupEditProfile.querySelector('.popup__container');
-const formElementAddNewCard = popupAddNewCard.querySelector('.popup__container');
+const formElementEditProfile = popupEditProfile.querySelector('form');
+const formElementAddNewCard = popupAddNewCard.querySelector('form');
 // buttons
 const editProfileButton = document.querySelector('.profile__edit-button');
 const newCardButton = document.querySelector('.profile__new-card-button');
@@ -50,8 +25,8 @@ const templateCard = document.querySelector("#card-item");
 
 // popup functions
 const closePopupByEsc = (event) => {
-  const popup = document.querySelector(".popup_active");
   if (event.key === "Escape" || event.key === "Esc") {
+    const popup = document.querySelector(".popup_active");
     closePopup(popup)
   }
 }
@@ -61,38 +36,12 @@ const openPopup = popup => {
   document.addEventListener('keydown', closePopupByEsc)
 };
 
-const closePopupChain = (popup, buttonFlag = false) => {
-  hideErrorState(popup, buttonFlag)
-  clearInputsInPopup(popup)
-  document.removeEventListener('keydown', closePopupByEsc)
-  popup.classList.remove('popup_active');
-}
-
 const closePopup = popup => {
-  // popup type defines closing behavior 
-  switch (true) {
-    //show card
-    case popup.classList.contains('popup_type_show-card'):
-      document.removeEventListener('keydown', closePopupByEsc)
-      popup.classList.remove('popup_active');
-      break;
-    //add new card
-    case popup.classList.contains('popup_type_new-card'):
-      closePopupChain(popup, true)
-      break
-    //edit profile
-    default:
-      closePopupChain(popup)
-  }
-};
-
-const hideErrorState = (popup, buttonFlag = false) => {
-  popup.querySelectorAll('.message-error').forEach(i => i.textContent = "");
-  popup.querySelectorAll('.input').forEach(input => input.classList.remove('input_error'));
-  popup.querySelector('button').disabled = buttonFlag;
+  popup.classList.remove('popup_active')
+  document.removeEventListener('keydown', closePopupByEsc)
 }
 
-const clearInputsInPopup = popup => popup.querySelector('.popup__form').reset();
+const resetForm = formToReset => formToReset.reset();
 const setDataInPopupProfileEdit = () => {
   nameInput.value = profileName.textContent
   occupationInput.value = profileOccupation.textContent
@@ -103,35 +52,34 @@ const setDataFromProfileEditToPage = () => {
   profileOccupation.textContent = occupationInput.value;
 }
 
-
+// у всех изображений есть alt, подтягивается из template, добавьте карточку с поломанной ссылкой, увидите alt
 const setDataFromCardToPopup = ({ src, title }) => {
   imgPopupShowCard.src = src;
   descriptionPopupShowCard.textContent = title;
 }
 const getDataForNewCardFromUserInput = () => ({ name: nameInputNewCard.value, link: linkInputNewCard.value });
-const showCard = evt => {
-  setDataFromCardToPopup(getDataFromCard(evt.target))
+const showCard = cardDataObject => {
+  setDataFromCardToPopup(cardDataObject)
   openPopup(popupShowCard)
 }
 
 const removeCard = evt => evt.target.closest('.card').remove();
 const toggleLikeState = evt => evt.target.classList.toggle('card__like-button_active');
-const getDataFromCard = target => {
-  const card = target.closest('.card');
-  const srcImage = card.querySelector('.card__image').src;
-  const titleCard = card.querySelector('.card__title').textContent;
-  return { src: srcImage, title: titleCard }
-}
 
 // initial cards upload
 const addInitialCard = (card, placeForCard) => placeForCard.append(card);
 const createCard = (template, { name, link }) => {
   const cardFromTemplate = template.content.cloneNode(true).querySelector('.card').cloneNode(true);
-  cardFromTemplate.querySelector(".card__image").src = link;
-  cardFromTemplate.querySelector(".card__title").textContent = name;
+  const cardImage = cardFromTemplate.querySelector(".card__image");
+  cardImage.src = link;
+  const cardTitle = cardFromTemplate.querySelector(".card__title");
+  cardTitle.textContent = name;
+  const cardDataObject = { src: link, title: name }
   cardFromTemplate.querySelector(".card__delete-icon").addEventListener('click', removeCard);
   cardFromTemplate.querySelector(".card__like-button").addEventListener('click', toggleLikeState);
-  cardFromTemplate.querySelector(".card__image").addEventListener('click', showCard);
+  cardImage.addEventListener('click', () => {
+    showCard(cardDataObject)
+  });
   return cardFromTemplate
 }
 
@@ -142,31 +90,30 @@ initialCards.forEach(cardData => {
 const addNewCard = (card, placeForCard) => placeForCard.prepend(card);
 
 //forms handlers  
-const formSubmitProfileEdit = (evt) => {
+const handleSubmitProfileEditForm = (evt) => {
   evt.preventDefault();
   setDataFromProfileEditToPage()
   closePopup(popupEditProfile)
 }
 
-const formSubmitNewCard = (evt) => {
+const handleSubmitNewCard = (evt) => {
   evt.preventDefault();
   const card = createCard(templateCard, getDataForNewCardFromUserInput())
   addNewCard(card, listWithCards)
   closePopup(popupAddNewCard)
 }
 
-setDataInPopupProfileEdit()
-
 // main listeners
 editProfileButton.addEventListener('click', () => {
   setDataInPopupProfileEdit()
   openPopup(popupEditProfile);
 });
-formElementEditProfile.addEventListener('submit', formSubmitProfileEdit)
+formElementEditProfile.addEventListener('submit', handleSubmitProfileEditForm)
 newCardButton.addEventListener('click', () => {
+  resetForm(formElementAddNewCard)
   openPopup(popupAddNewCard);
 });
-formElementAddNewCard.addEventListener('submit', formSubmitNewCard)
+formElementAddNewCard.addEventListener('submit', handleSubmitNewCard)
 closeButtons.forEach(i => i.addEventListener('click', () => {
   closePopup(i.closest('.popup_active'))
 }))

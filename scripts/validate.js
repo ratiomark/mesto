@@ -2,28 +2,25 @@ const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.input',
   buttonSelector: '.popup__save-button',
-  errorElemClass: 'message-error_active',
   inputElemErrorClass: 'input_error',
 }
 
-const showInputError = (formElement, inputElem, errorMessage, errorElemClass, inputElemErrorClass) => {
+const showInputError = (formElement, inputElem, errorMessage, inputElemErrorClass) => {
   const errorElem = formElement.querySelector(`.${inputElem.id}-error`)
   errorElem.textContent = errorMessage;
-  errorElem.classList.add(errorElemClass);
   inputElem.classList.add(inputElemErrorClass)
 }
-const hideInputError = (formElement, inputElem, errorElemClass, inputElemErrorClass) => {
+const hideInputError = (formElement, inputElem, inputElemErrorClass) => {
   const errorElem = formElement.querySelector(`.${inputElem.id}-error`)
   errorElem.textContent = '';
-  errorElem.classList.remove(errorElemClass);
   inputElem.classList.remove(inputElemErrorClass)
 }
 
-const validateInput = (formElement, inputElem, errorElemClass, inputElemErrorClass) => {
+const validateInput = (formElement, inputElem, inputElemErrorClass) => {
   if (!inputElem.validity.valid) {
-    showInputError(formElement, inputElem, inputElem.validationMessage, errorElemClass, inputElemErrorClass)
+    showInputError(formElement, inputElem, inputElem.validationMessage, inputElemErrorClass)
   } else {
-    hideInputError(formElement, inputElem, errorElemClass, inputElemErrorClass)
+    hideInputError(formElement, inputElem, inputElemErrorClass)
   }
 }
 
@@ -37,23 +34,27 @@ function validateForm(inputList, buttonSubmit) {
   }
 }
 
-function setListeners(formElement, inputSelector, buttonSelector, errorElemClass, inputElemErrorClass) {
+function setListeners(formElement, inputSelector, buttonSelector, inputElemErrorClass) {
   const inputList = Array.from(formElement.querySelectorAll(inputSelector));
   const buttonSubmit = formElement.querySelector(buttonSelector)
-  validateForm(inputList, buttonSubmit);
+  const buttonPopupOpen = document.querySelector(`${formElement.dataset.buttonSelector}`)
+  buttonPopupOpen.addEventListener('click', () => {
+    inputList.forEach(inputElem => { hideInputError(formElement, inputElem, inputElemErrorClass) })
+    validateForm(inputList, buttonSubmit)
+  });
   inputList.forEach(inputElem => {
     inputElem.addEventListener('input', () => {
-      validateInput(formElement, inputElem, errorElemClass, inputElemErrorClass)
+      validateInput(formElement, inputElem, inputElemErrorClass)
       validateForm(inputList, buttonSubmit)
     });
   })
 }
 
 const enableValidation = (config) => {
-  const { formSelector, inputSelector, buttonSelector, errorElemClass, inputElemErrorClass } = config;
+  const { formSelector, inputSelector, buttonSelector, inputElemErrorClass } = config;
   const forms = Array.from(document.querySelectorAll(formSelector));
   forms.forEach(formElement => {
-    setListeners(formElement, inputSelector, buttonSelector, errorElemClass, inputElemErrorClass)
+    setListeners(formElement, inputSelector, buttonSelector, inputElemErrorClass)
   })
 }
 
