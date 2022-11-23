@@ -1,8 +1,10 @@
 
 .popup__link {
-  margin-bottom: 45px;
+  margin-bottom: 5px;
+  /* margin-bottom: 45px; */
 }
-@media screen and (min-width: 719px) {
-.popup__link {
-  margin-bottom: 48px;
-}}
+/* @media screen and (min-width: 719px) { */
+/* .popup__link { */
+  /* margin-bottom: 5px; */
+  /* margin-bottom: 48px; */
+/* }} */

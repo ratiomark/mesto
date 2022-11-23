@@ -28,6 +28,7 @@ const initialCards = [
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddNewCard = document.querySelector('.popup_type_new-card');
 const popupShowCard = document.querySelector('.popup_type_show-card');
+const popupList = document.querySelectorAll('.popup');
 const formElementEditProfile = popupEditProfile.querySelector('.popup__container');
 const formElementAddNewCard = popupAddNewCard.querySelector('.popup__container');
 // buttons
@@ -48,9 +49,51 @@ const listWithCards = document.querySelector(".cards__list");
 const templateCard = document.querySelector("#card-item");
 
 // popup functions
-const openPopup = popup => popup.classList.add('popup_active');
-const closePopup = popup => popup.classList.remove('popup_active');
-const clearInputsInPopup = popupAddNewCard => popupAddNewCard.querySelectorAll('input').forEach(input => input.value = '');
+const closePopupByEsc = (event) => {
+  const popup = document.querySelector(".popup_active");
+  if (event.key === "Escape" || event.key === "Esc") {
+    closePopup(popup)
+  }
+}
+
+const openPopup = popup => {
+  popup.classList.add('popup_active');
+  document.addEventListener('keydown', closePopupByEsc)
+};
+
+const closePopup = popup => {
+  // popup type defines closing behavior 
+  switch (true) {
+    // show card
+    case popup.classList.contains('popup_type_show-card'):
+      document.removeEventListener('keydown', closePopupByEsc)
+      popup.classList.remove('popup_active');
+      break;
+    //add new card
+    case popup.classList.contains('popup_type_new-card'):
+      hideErrorState(popup)
+      clearInputsInPopup(popup)
+      document.removeEventListener('keydown', closePopupByEsc)
+      popup.classList.remove('popup_active');
+      disableButton(popup)
+      break
+    //edit profile
+    default:
+      hideErrorState(popup)
+      clearInputsInPopup(popup)
+      document.removeEventListener('keydown', closePopupByEsc)
+      popup.classList.remove('popup_active');
+  }
+};
+
+const hideErrorState = (popup) => {
+  popup.querySelectorAll('.message-error').forEach(i => i.textContent = "");
+  popup.querySelectorAll('.input').forEach(input => input.classList.remove('input_error'));
+  popup.querySelector('button').disabled = false;
+}
+
+const clearInputsInPopup = popup => popup.querySelector('.popup__form').reset();
+const disableButton = popupAddNewCard => popupAddNewCard.querySelector('.popup__save-button').disabled = true;
 const setDataInPopupProfileEdit = () => {
   nameInput.value = profileName.textContent
   occupationInput.value = profileOccupation.textContent
@@ -60,6 +103,8 @@ const setDataFromProfileEditToPage = () => {
   profileName.textContent = nameInput.value;
   profileOccupation.textContent = occupationInput.value;
 }
+
+
 const setDataFromCardToPopup = ({ src, title }) => {
   imgPopupShowCard.src = src;
   descriptionPopupShowCard.textContent = title;
@@ -108,42 +153,10 @@ const formSubmitNewCard = (evt) => {
   evt.preventDefault();
   const card = createCard(templateCard, getDataForNewCardFromUserInput())
   addNewCard(card, listWithCards)
-  clearInputsInPopup(popupAddNewCard)
   closePopup(popupAddNewCard)
 }
 
-const hasInvalidInputs = (inputList) => inputList.some(inputElem => !inputElem.validity.valid);
-// const validateInput = (inputElem, ) => {
-// validationMessage
-// }
-function validateForm(formElement, inputList, buttonSubmit) {
-  if (hasInvalidInputs(inputList)) {
-    buttonSubmit.classList.add('DISABLED')
-  } else {
-    buttonSubmit.classList.remove('DISABLED')
-  }
-}
-const enableValidation = (formSelector, inputSelector, buttonSelector) => {
-  const forms = Array.from(document.querySelectorAll(formSelector));
-  console.log(forms)
-
-  forms.forEach(formElement => {
-    const inputList = Array.from(formElement.querySelectorAll(inputSelector));
-    const buttonSubmit = formElement.querySelector(buttonSelector)
-    validateForm(formElement, inputList, buttonSubmit)
-    formElement.addEventListener('submit', (e) => {
-      e.preventDefault()
-    });
-    console.log(inputList)
-
-    inputList.forEach(inputElem => {
-      inputElem.addEventListener('input', (e) => {
-        // validateInput()
-      });
-    })
-  })
-}
-enableValidation('.popup__form', '.input', '.popup__save-button')
+setDataInPopupProfileEdit()
 
 // main listeners
 editProfileButton.addEventListener('click', () => {
@@ -158,3 +171,11 @@ formElementAddNewCard.addEventListener('submit', formSubmitNewCard)
 closeButtons.forEach(i => i.addEventListener('click', () => {
   closePopup(i.closest('.popup_active'))
 }))
+// close popup by overlay
+popupList.forEach(popupItem => {
+  popupItem.addEventListener('click', (e) => {
+    if (e.target == e.currentTarget) {
+      closePopup(popupItem)
+    }
+  })
+})

@@ -10,3 +10,11 @@
 .button:hover {
   opacity: 0.6;
 }
+.button:disabled {
+  border: 1px solid#C4C4C4;
+  color: #c4c4c4;
+  background-color: white;
+}
+.button:disabled:hover{
+  opacity: 1;
+}
