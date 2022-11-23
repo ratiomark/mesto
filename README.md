@@ -1,6 +1,7 @@
 # Проект "Место"
 
 ## Мини сайт о сущностях и местах которые они посещали
+
 https://ratiomark.github.io/mesto/
 
 ### Фишки
@@ -12,3 +13,5 @@ https://ratiomark.github.io/mesto/
 - Vanila JS
 - Grid + Flex
 - BEM nested
+- Input validation
+- Close popups by ESC
