@@ -53,11 +53,18 @@ const setDataFromProfileEditToPage = () => {
 }
 
 // у всех изображений есть alt, подтягивается из template, добавьте карточку с поломанной ссылкой, увидите alt
-const setDataFromCardToPopup = ({ src, title }) => {
+const setDataFromCardToPopup = ({ src, title, alt }) => {
   imgPopupShowCard.src = src;
+  imgPopupShowCard.alt = alt;
   descriptionPopupShowCard.textContent = title;
 }
-const getDataForNewCardFromUserInput = () => ({ name: nameInputNewCard.value, link: linkInputNewCard.value });
+const getDataForNewCardFromUserInput = () => (
+  {
+    name: nameInputNewCard.value,
+    link: linkInputNewCard.value,
+    alt: "Картинка к карточке"
+  });
+
 const showCard = cardDataObject => {
   setDataFromCardToPopup(cardDataObject)
   openPopup(popupShowCard)
@@ -68,13 +75,14 @@ const toggleLikeState = evt => evt.target.classList.toggle('card__like-button_ac
 
 // initial cards upload
 const addInitialCard = (card, placeForCard) => placeForCard.append(card);
-const createCard = (template, { name, link }) => {
+const createCard = (template, { name, link, alt }) => {
   const cardFromTemplate = template.content.cloneNode(true).querySelector('.card').cloneNode(true);
   const cardImage = cardFromTemplate.querySelector(".card__image");
   cardImage.src = link;
   const cardTitle = cardFromTemplate.querySelector(".card__title");
   cardTitle.textContent = name;
-  const cardDataObject = { src: link, title: name }
+  cardImage.alt = alt;
+  const cardDataObject = { src: link, title: name, alt: alt }
   cardFromTemplate.querySelector(".card__delete-icon").addEventListener('click', removeCard);
   cardFromTemplate.querySelector(".card__like-button").addEventListener('click', toggleLikeState);
   cardImage.addEventListener('click', () => {
