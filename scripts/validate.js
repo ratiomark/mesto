@@ -23,6 +23,13 @@ const validateInput = (formElement, inputElem, inputElemErrorClass) => {
     hideInputError(formElement, inputElem, inputElemErrorClass)
   }
 }
+function resetValidationState(popup) {
+  const formElement = popup.querySelector('.popup__form');
+  const inputList = Array.from(formElement.querySelectorAll('.input'))
+  const buttonSubmit = popup.querySelector('.popup__save-button')
+  inputList.forEach(inputElem => hideInputError(formElement, inputElem, 'input_error',))
+  validateForm(inputList, buttonSubmit)
+}
 
 const hasInvalidInput = (inputList) => inputList.some(inputElem => !inputElem.validity.valid);
 
@@ -37,11 +44,6 @@ function validateForm(inputList, buttonSubmit) {
 function setListeners(formElement, inputSelector, buttonSelector, inputElemErrorClass) {
   const inputList = Array.from(formElement.querySelectorAll(inputSelector));
   const buttonSubmit = formElement.querySelector(buttonSelector)
-  const buttonPopupOpen = document.querySelector(`${formElement.dataset.buttonSelector}`)
-  buttonPopupOpen.addEventListener('click', () => {
-    inputList.forEach(inputElem => { hideInputError(formElement, inputElem, inputElemErrorClass) })
-    validateForm(inputList, buttonSubmit)
-  });
   inputList.forEach(inputElem => {
     inputElem.addEventListener('input', () => {
       validateInput(formElement, inputElem, inputElemErrorClass)

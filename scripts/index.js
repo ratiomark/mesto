@@ -1,4 +1,3 @@
-import initialCards from "./initialCards.js";
 // popups and forms
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddNewCard = document.querySelector('.popup_type_new-card');
@@ -114,11 +113,13 @@ const handleSubmitNewCard = (evt) => {
 // main listeners
 editProfileButton.addEventListener('click', () => {
   setDataInPopupProfileEdit()
+  resetValidationState(popupEditProfile)
   openPopup(popupEditProfile);
 });
 formElementEditProfile.addEventListener('submit', handleSubmitProfileEditForm)
 newCardButton.addEventListener('click', () => {
   resetForm(formElementAddNewCard)
+  resetValidationState(popupAddNewCard)
   openPopup(popupAddNewCard);
 });
 formElementAddNewCard.addEventListener('submit', handleSubmitNewCard)
