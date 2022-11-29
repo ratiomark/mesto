@@ -61,7 +61,7 @@ const getDataForNewCardFromUserInput = () => (
   {
     name: nameInputNewCard.value,
     link: linkInputNewCard.value,
-    alt: "Картинка к карточке"
+    alt: nameInputNewCard.value
   });
 
 const showCard = cardDataObject => {
