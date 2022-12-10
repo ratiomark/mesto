@@ -17,8 +17,9 @@ class Card {
   }
 
   _setDataInTemplate() {
-    this._template.querySelector(".card__image").src = this._link;
-    this._template.querySelector(".card__image").alt = this._alt;
+    this._image = this._template.querySelector(".card__image")
+    this._image.src = this._link;
+    this._image.alt = this._alt;
     this._template.querySelector(".card__title").textContent = this._name;
   }
 

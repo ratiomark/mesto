@@ -73,11 +73,14 @@ const showCard = cardDataObject => {
   setDataFromCardToPopup(cardDataObject)
   openPopup(popupShowCard)
 }
-
+const createNewCard = (cardData, templateSelector, showCardFunction) => {
+  const card = new Card(cardData, templateSelector, showCardFunction).getCardHTML();
+  return card;
+}
 // initial cards upload
 const addInitialCard = (card, placeForCard) => placeForCard.append(card);
 initialCards.forEach(cardData => {
-  const card = new Card(cardData, "#card-item", showCard).getCardHTML()
+  const card = createNewCard(cardData, "#card-item", showCard)
   addInitialCard(card, listWithCards)
 });
 
@@ -94,7 +97,7 @@ const handleSubmitProfileEditForm = (evt) => {
 const handleSubmitNewCard = (evt) => {
   evt.preventDefault();
   const userInputDataObject = getDataForNewCardFromUserInput()
-  const card = new Card(userInputDataObject, "#card-item").getCardHTML()
+  const card = createNewCard(userInputDataObject, "#card-item", showCard)
   addNewCard(card, listWithCards)
   closePopup(popupAddNewCard)
 }
@@ -112,8 +115,8 @@ newCardButton.addEventListener('click', () => {
   openPopup(popupAddNewCard);
 });
 formElementAddNewCard.addEventListener('submit', handleSubmitNewCard)
-closeButtons.forEach(i => i.addEventListener('click', () => {
-  closePopup(i.closest('.popup_active'))
+closeButtons.forEach(button => button.addEventListener('click', () => {
+  closePopup(button.closest('.popup_active'))
 }))
 // close popup by overlay
 popupList.forEach(popupItem => {
