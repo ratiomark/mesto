@@ -32,21 +32,8 @@ class Card {
 
   _removeCard = evt => evt.target.closest('.card').remove();
   _toggleLikeState = evt => evt.target.classList.toggle('card__like-button_active');
-  // _showCard = evt => {
-  //   imgPopupShowCard.src = this._link;
-  //   imgPopupShowCard.alt = this._alt;
-  //   descriptionPopupShowCard.textContent = this._name;
-  //   popupShowCard.classList.add('popup_active')
-  //   document.addEventListener('keydown', closePopupByEsc)
-  // }
-  // _closeCardByESC = (event) => {
-  //   if (event.key === "Escape" || event.key === "Esc") {
-  //     popupShowCard.classList.remove('popup_active')
-  //   }
-  // }
 
   getCardHTML() {
-    // this._setTemplate()
     this._setTemplate()
     this._setDataInTemplate()
     this._setEventListeners()
@@ -54,4 +41,5 @@ class Card {
   }
 
 }
+
 export { Card };

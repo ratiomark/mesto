@@ -1,8 +1,6 @@
 import { Card } from "./Card.js"
 import initialCards from "./initialCards.js";
-// import { resetValidationState } from "./validate.js"
-import { resetValidationState, enableValidation, validationConfig } from "./validate.js"
-// popupShowCard, closePopupByEsc, imgPopupShowCard, descriptionPopupShowCard
+import { FormValidator, validationConfig } from "./FormValidator.js"
 // popups and forms
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddNewCard = document.querySelector('.popup_type_new-card');
@@ -10,6 +8,10 @@ const popupShowCard = document.querySelector('.popup_type_show-card');
 const popupList = document.querySelectorAll('.popup');
 const formElementEditProfile = popupEditProfile.querySelector('form');
 const formElementAddNewCard = popupAddNewCard.querySelector('form');
+const formElementEditProfileObject = new FormValidator(validationConfig, formElementEditProfile)
+const formElementAddNewCardObject = new FormValidator(validationConfig, formElementAddNewCard)
+formElementEditProfileObject.enableValidation()
+formElementAddNewCardObject.enableValidation()
 // buttons
 const editProfileButton = document.querySelector('.profile__edit-button');
 const newCardButton = document.querySelector('.profile__new-card-button');
@@ -25,7 +27,6 @@ const profileOccupation = document.querySelector('.profile__occupation');
 const imgPopupShowCard = popupShowCard.querySelector('.popup__image');
 const descriptionPopupShowCard = popupShowCard.querySelector('.popup__image-description');
 const listWithCards = document.querySelector(".cards__list");
-const templateCard = document.querySelector("#card-item");
 
 // popup functions
 const closePopupByEsc = (event) => {
@@ -56,7 +57,6 @@ const setDataFromProfileEditToPage = () => {
   profileOccupation.textContent = occupationInput.value;
 }
 
-// у всех изображений есть alt, подтягивается из template, добавьте карточку с поломанной ссылкой, увидите alt
 const setDataFromCardToPopup = ({ link, name, alt }) => {
   imgPopupShowCard.src = link;
   imgPopupShowCard.alt = alt;
@@ -76,13 +76,12 @@ const showCard = cardDataObject => {
 
 // initial cards upload
 const addInitialCard = (card, placeForCard) => placeForCard.append(card);
-
 initialCards.forEach(cardData => {
   const card = new Card(cardData, "#card-item", showCard).getCardHTML()
   addInitialCard(card, listWithCards)
 });
 
-enableValidation(validationConfig)
+// enableValidation(validationConfig)
 const addNewCard = (card, placeForCard) => placeForCard.prepend(card);
 
 //forms handlers  
@@ -103,13 +102,13 @@ const handleSubmitNewCard = (evt) => {
 // main listeners
 editProfileButton.addEventListener('click', () => {
   setDataInPopupProfileEdit()
-  resetValidationState(popupEditProfile)
+  formElementEditProfileObject.resetValidationState()
   openPopup(popupEditProfile);
 });
 formElementEditProfile.addEventListener('submit', handleSubmitProfileEditForm)
 newCardButton.addEventListener('click', () => {
   resetForm(formElementAddNewCard)
-  resetValidationState(popupAddNewCard)
+  formElementAddNewCardObject.resetValidationState()
   openPopup(popupAddNewCard);
 });
 formElementAddNewCard.addEventListener('submit', handleSubmitNewCard)
