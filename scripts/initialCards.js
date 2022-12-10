@@ -30,3 +30,5 @@ const initialCards = [
     link: 'https://i.pinimg.com/564x/14/46/8e/14468e41e4dc9c320eea11ad06cd7c3d.jpg'
   }
 ];
+
+export default initialCards;

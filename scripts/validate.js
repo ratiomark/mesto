@@ -60,4 +60,4 @@ const enableValidation = (config) => {
   })
 }
 
-enableValidation(validationConfig)
+export { resetValidationState, enableValidation, validationConfig }

@@ -1,3 +1,8 @@
+import { Card } from "./Card.js"
+import initialCards from "./initialCards.js";
+// import { resetValidationState } from "./validate.js"
+import { resetValidationState, enableValidation, validationConfig } from "./validate.js"
+// popupShowCard, closePopupByEsc, imgPopupShowCard, descriptionPopupShowCard
 // popups and forms
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddNewCard = document.querySelector('.popup_type_new-card');
@@ -52,10 +57,10 @@ const setDataFromProfileEditToPage = () => {
 }
 
 // у всех изображений есть alt, подтягивается из template, добавьте карточку с поломанной ссылкой, увидите alt
-const setDataFromCardToPopup = ({ src, title, alt }) => {
-  imgPopupShowCard.src = src;
+const setDataFromCardToPopup = ({ link, name, alt }) => {
+  imgPopupShowCard.src = link;
   imgPopupShowCard.alt = alt;
-  descriptionPopupShowCard.textContent = title;
+  descriptionPopupShowCard.textContent = name;
 }
 const getDataForNewCardFromUserInput = () => (
   {
@@ -69,31 +74,15 @@ const showCard = cardDataObject => {
   openPopup(popupShowCard)
 }
 
-const removeCard = evt => evt.target.closest('.card').remove();
-const toggleLikeState = evt => evt.target.classList.toggle('card__like-button_active');
-
 // initial cards upload
 const addInitialCard = (card, placeForCard) => placeForCard.append(card);
-const createCard = (template, { name, link, alt }) => {
-  const cardFromTemplate = template.content.cloneNode(true).querySelector('.card').cloneNode(true);
-  const cardImage = cardFromTemplate.querySelector(".card__image");
-  cardImage.src = link;
-  const cardTitle = cardFromTemplate.querySelector(".card__title");
-  cardTitle.textContent = name;
-  cardImage.alt = alt;
-  const cardDataObject = { src: link, title: name, alt: alt }
-  cardFromTemplate.querySelector(".card__delete-icon").addEventListener('click', removeCard);
-  cardFromTemplate.querySelector(".card__like-button").addEventListener('click', toggleLikeState);
-  cardImage.addEventListener('click', () => {
-    showCard(cardDataObject)
-  });
-  return cardFromTemplate
-}
 
 initialCards.forEach(cardData => {
-  addInitialCard(createCard(templateCard, cardData), listWithCards)
+  const card = new Card(cardData, "#card-item", showCard).getCardHTML()
+  addInitialCard(card, listWithCards)
 });
 
+enableValidation(validationConfig)
 const addNewCard = (card, placeForCard) => placeForCard.prepend(card);
 
 //forms handlers  
@@ -105,7 +94,8 @@ const handleSubmitProfileEditForm = (evt) => {
 
 const handleSubmitNewCard = (evt) => {
   evt.preventDefault();
-  const card = createCard(templateCard, getDataForNewCardFromUserInput())
+  const userInputDataObject = getDataForNewCardFromUserInput()
+  const card = new Card(userInputDataObject, "#card-item").getCardHTML()
   addNewCard(card, listWithCards)
   closePopup(popupAddNewCard)
 }
@@ -134,3 +124,4 @@ popupList.forEach(popupItem => {
     }
   })
 })
+
