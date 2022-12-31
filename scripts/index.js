@@ -26,7 +26,21 @@ const profileName = document.querySelector('.profile__name');
 const profileOccupation = document.querySelector('.profile__occupation');
 const imgPopupShowCard = popupShowCard.querySelector('.popup__image');
 const descriptionPopupShowCard = popupShowCard.querySelector('.popup__image-description');
-const listWithCards = document.querySelector(".cards__list");
+const listWithCards = ".cards__list";
+
+class Section {
+  constructor({ items, renderer }, containerSelector) {
+    this._items = items;
+    this._renderer = renderer;
+    this.container = document.querySelector(containerSelector);
+  }
+  renderItems() {
+    this._items.forEach(item => this._renderer(item))
+  }
+  addItem(element) {
+    this.container.prepend(element)
+  }
+}
 
 // popup functions
 const closePopupByEsc = (event) => {
@@ -78,11 +92,19 @@ const createNewCard = (cardData, templateSelector, showCardFunction) => {
   return card;
 }
 // initial cards upload
-const addInitialCard = (card, placeForCard) => placeForCard.append(card);
-initialCards.forEach(cardData => {
-  const card = createNewCard(cardData, "#card-item", showCard)
-  addInitialCard(card, listWithCards)
-});
+const cardsUploader = new Section({
+  items: initialCards,
+  renderer: (cardData) => {
+    const card = createNewCard(cardData, "#card-item", showCard)
+    cardsUploader.container.append(card)
+  }
+}, listWithCards)
+cardsUploader.renderItems()
+// const addInitialCard = (card, placeForCard) => placeForCard.append(card);
+// initialCards.forEach(cardData => {
+// const card = createNewCard(cardData, "#card-item", showCard)
+// addInitialCard(card, listWithCards)
+// });
 
 // enableValidation(validationConfig)
 const addNewCard = (card, placeForCard) => placeForCard.prepend(card);
@@ -98,7 +120,8 @@ const handleSubmitNewCard = (evt) => {
   evt.preventDefault();
   const userInputDataObject = getDataForNewCardFromUserInput()
   const card = createNewCard(userInputDataObject, "#card-item", showCard)
-  addNewCard(card, listWithCards)
+  cardsUploader.addItem(card)
+  // addNewCard(card, listWithCards)
   closePopup(popupAddNewCard)
 }
 
