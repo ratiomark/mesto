@@ -2,12 +2,11 @@ import { Card } from "./Card.js"
 import initialCards from "./initialCards.js";
 import { FormValidator, validationConfig } from "./FormValidator.js"
 // popups and forms
-const popupEditProfile = document.querySelector('.popup_type_edit-profile');
-const popupAddNewCard = document.querySelector('.popup_type_new-card');
-const popupShowCard = document.querySelector('.popup_type_show-card');
-const popupList = document.querySelectorAll('.popup');
-const formElementEditProfile = popupEditProfile.querySelector('form');
-const formElementAddNewCard = popupAddNewCard.querySelector('form');
+const popupEditProfile2 = document.querySelector('.popup_type_edit-profile');
+const popupAddNewCard2 = document.querySelector('.popup_type_new-card');
+// const popupShowCard = document.querySelector('.popup_type_show-card');
+const formElementEditProfile = popupEditProfile2.querySelector('form');
+const formElementAddNewCard = popupAddNewCard2.querySelector('form');
 const formElementEditProfileObject = new FormValidator(validationConfig, formElementEditProfile)
 const formElementAddNewCardObject = new FormValidator(validationConfig, formElementAddNewCard)
 formElementEditProfileObject.enableValidation()
@@ -15,17 +14,7 @@ formElementAddNewCardObject.enableValidation()
 // buttons
 const editProfileButton = document.querySelector('.profile__edit-button');
 const newCardButton = document.querySelector('.profile__new-card-button');
-const closeButtons = document.querySelectorAll('.popup__close-button')
-// inputs
-const nameInput = popupEditProfile.querySelector('.popup__name');
-const occupationInput = popupEditProfile.querySelector('.popup__occupation');
-const nameInputNewCard = popupAddNewCard.querySelector('.popup__name');
-const linkInputNewCard = popupAddNewCard.querySelector('.popup__link');
 // other
-const profileName = document.querySelector('.profile__name');
-const profileOccupation = document.querySelector('.profile__occupation');
-const imgPopupShowCard = popupShowCard.querySelector('.popup__image');
-const descriptionPopupShowCard = popupShowCard.querySelector('.popup__image-description');
 const listWithCards = ".cards__list";
 
 class Section {
@@ -42,55 +31,121 @@ class Section {
   }
 }
 
-// popup functions
-const closePopupByEsc = (event) => {
-  if (event.key === "Escape" || event.key === "Esc") {
-    const popup = document.querySelector(".popup_active");
-    closePopup(popup)
+class Popup {
+  constructor(popupSelector) {
+    this.popup = document.querySelector(popupSelector);
+  }
+  open() {
+    this.popup.classList.add('popup_active')
+    document.addEventListener('keydown', this._handleEscClose.bind(this))
+  }
+  close() {
+    this.popup.classList.remove('popup_active')
+    document.removeEventListener("keydown", this._handleEscClose)
+  }
+  _handleEscClose(event) {
+    if (event.key === "Escape" || event.key === "Esc") {
+      this.close();
+    }
+  }
+  _handleCloseByOverlay(event) {
+    if (event.target == event.currentTarget) {
+      this.close()
+    }
+  }
+  setEventListeners() {
+    this.popup.querySelector('.popup__close-button').addEventListener("click", this.close.bind(this))
+    this.popup.addEventListener('click', this._handleCloseByOverlay.bind(this))
   }
 }
 
-const openPopup = popup => {
-  popup.classList.add('popup_active');
-  document.addEventListener('keydown', closePopupByEsc)
-};
-
-const closePopup = popup => {
-  popup.classList.remove('popup_active')
-  document.removeEventListener('keydown', closePopupByEsc)
+class PopupWithImage extends Popup {
+  open({ link, name, alt }) {
+    this._imgPopupShowCard = this.popup.querySelector('.popup__image');
+    this._descriptionPopupShowCard = this.popup.querySelector('.popup__image-description');
+    this._imgPopupShowCard.src = link;
+    this._imgPopupShowCard.alt = alt;
+    this._descriptionPopupShowCard.textContent = name;
+    super.open()
+  }
 }
 
-const resetForm = formToReset => formToReset.reset();
-const setDataInPopupProfileEdit = () => {
-  nameInput.value = profileName.textContent
-  occupationInput.value = profileOccupation.textContent
+class PopupWithForm extends Popup {
+  constructor(popupSelector, submitCallback) {
+    super(popupSelector)
+    this._submitCallback = submitCallback;
+  }
+  _getInputValues() {
+    this._inputs = this.popup.querySelectorAll('input')
+    this._inputValueObject = {}
+    this._inputs.forEach(i => this._inputValueObject[i.name] = i.value)
+    return this._inputValueObject
+  }
+  setEventListeners() {
+    super.setEventListeners()
+    this.form = this.popup.querySelector('.popup__form')
+    this.form.addEventListener('submit', this._submitCallback)
+  }
+  close() {
+    super.close()
+    this.form.reset()
+  }
 }
 
-const setDataFromProfileEditToPage = () => {
-  profileName.textContent = nameInput.value;
-  profileOccupation.textContent = occupationInput.value;
-}
+class UserInfo {
+  constructor(nameInputId, occupationInputId) {
+    this.nameInput = document.querySelector(nameInputId)
+    this.occupationInput = document.querySelector(occupationInputId)
+    this.profileNameTextValue = document.querySelector('.profile__name');
+    this.profileOccupationTextValue = document.querySelector('.profile__occupation');
+  }
+  getUserInfo() {
+    return { name: this.profileNameTextValue.textContent, occupation: this.profileOccupationTextValue.textContent }
+  }
+  setValuesFromProfileToInputs({ name, occupation }) {
+    this.nameInput.value = name;
+    this.occupationInput.value = occupation;
+  }
+  setUserInfo({ name, occupation }) {
+    this.profileNameTextValue.textContent = name
+    this.profileOccupationTextValue.textContent = occupation
+  }
 
-const setDataFromCardToPopup = ({ link, name, alt }) => {
-  imgPopupShowCard.src = link;
-  imgPopupShowCard.alt = alt;
-  descriptionPopupShowCard.textContent = name;
 }
-const getDataForNewCardFromUserInput = () => (
-  {
-    name: nameInputNewCard.value,
-    link: linkInputNewCard.value,
-    alt: nameInputNewCard.value
+const userInfoShow = new UserInfo("#popup__name", "#popup__occupation")
+
+const popupEditProfile = new PopupWithForm(
+  '.popup_type_edit-profile',
+  (event) => {
+    event.preventDefault()
+    userInfoShow.setUserInfo(popupEditProfile._getInputValues())
+    popupEditProfile.close()
   });
 
+const popupAddNewCard = new PopupWithForm(
+  '.popup_type_new-card',
+  (event) => {
+    event.preventDefault()
+    const userInputDataObject = popupAddNewCard._getInputValues()
+    userInputDataObject['alt'] = "Картинка к карточке"
+    const card = createNewCard(userInputDataObject, "#card-item", showCard)
+    cardsUploader.addItem(card)
+    popupAddNewCard.close()
+  });
+
+const popupShowCard = new PopupWithImage('.popup_type_show-card');
+popupEditProfile.setEventListeners()
+popupAddNewCard.setEventListeners()
+popupShowCard.setEventListeners()
+
 const showCard = cardDataObject => {
-  setDataFromCardToPopup(cardDataObject)
-  openPopup(popupShowCard)
+  popupShowCard.open(cardDataObject)
 }
 const createNewCard = (cardData, templateSelector, showCardFunction) => {
   const card = new Card(cardData, templateSelector, showCardFunction).getCardHTML();
   return card;
 }
+
 // initial cards upload
 const cardsUploader = new Section({
   items: initialCards,
@@ -99,54 +154,17 @@ const cardsUploader = new Section({
     cardsUploader.container.append(card)
   }
 }, listWithCards)
+
 cardsUploader.renderItems()
-// const addInitialCard = (card, placeForCard) => placeForCard.append(card);
-// initialCards.forEach(cardData => {
-// const card = createNewCard(cardData, "#card-item", showCard)
-// addInitialCard(card, listWithCards)
-// });
 
-// enableValidation(validationConfig)
-const addNewCard = (card, placeForCard) => placeForCard.prepend(card);
-
-//forms handlers  
-const handleSubmitProfileEditForm = (evt) => {
-  evt.preventDefault();
-  setDataFromProfileEditToPage()
-  closePopup(popupEditProfile)
-}
-
-const handleSubmitNewCard = (evt) => {
-  evt.preventDefault();
-  const userInputDataObject = getDataForNewCardFromUserInput()
-  const card = createNewCard(userInputDataObject, "#card-item", showCard)
-  cardsUploader.addItem(card)
-  // addNewCard(card, listWithCards)
-  closePopup(popupAddNewCard)
-}
-
-// main listeners
 editProfileButton.addEventListener('click', () => {
-  setDataInPopupProfileEdit()
+  userInfoShow.setValuesFromProfileToInputs(userInfoShow.getUserInfo())
   formElementEditProfileObject.resetValidationState()
-  openPopup(popupEditProfile);
+  popupEditProfile.open()
 });
-formElementEditProfile.addEventListener('submit', handleSubmitProfileEditForm)
+
 newCardButton.addEventListener('click', () => {
-  resetForm(formElementAddNewCard)
   formElementAddNewCardObject.resetValidationState()
-  openPopup(popupAddNewCard);
+  popupAddNewCard.open();
 });
-formElementAddNewCard.addEventListener('submit', handleSubmitNewCard)
-closeButtons.forEach(button => button.addEventListener('click', () => {
-  closePopup(button.closest('.popup_active'))
-}))
-// close popup by overlay
-popupList.forEach(popupItem => {
-  popupItem.addEventListener('click', (e) => {
-    if (e.target == e.currentTarget) {
-      closePopup(popupItem)
-    }
-  })
-})
 
