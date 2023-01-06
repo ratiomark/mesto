@@ -1,3 +1,5 @@
+node_modules
+dist 
 styles
 BEMgeneratorFromCSS V2.py
 scripts/app.js
