@@ -8,7 +8,7 @@ class Card {
   }
 
   _setTemplate() {
-    this._template = document
+    this._cardFromTemplate = document
       .querySelector(this._selector)
       .content
       .cloneNode(true)
@@ -17,28 +17,28 @@ class Card {
   }
 
   _setDataInTemplate() {
-    this._image = this._template.querySelector(".card__image")
+    this._image = this._cardFromTemplate.querySelector(".card__image")
     this._image.src = this._link;
     this._image.alt = this._alt;
-    this._template.querySelector(".card__title").textContent = this._name;
+    this._cardFromTemplate.querySelector(".card__title").textContent = this._name;
   }
 
   _setEventListeners() {
-    this._template.querySelector(".card__delete-icon").addEventListener('click', this._removeCard)
-    this._template.querySelector(".card__like-button").addEventListener('click', this._toggleLikeState);
-    this._template.querySelector(".card__image").addEventListener('click', () => {
+    this._cardFromTemplate.querySelector(".card__delete-icon").addEventListener('click', this._removeCard)
+    this._cardFromTemplate.querySelector(".card__like-button").addEventListener('click', this._toggleLikeState);
+    this._cardFromTemplate.querySelector(".card__image").addEventListener('click', () => {
       this.handleCardClick({ name: this._name, link: this._link, alt: this._alt })
     })
   }
 
-  _removeCard = evt => evt.target.closest('.card').remove();
+  _removeCard = (_) => this._cardFromTemplate.remove();
   _toggleLikeState = evt => evt.target.classList.toggle('card__like-button_active');
 
   getCardHTML() {
     this._setTemplate()
     this._setDataInTemplate()
     this._setEventListeners()
-    return this._template;
+    return this._cardFromTemplate;
   }
 
 }

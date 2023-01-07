@@ -10,8 +10,15 @@ https://ratiomark.github.io/mesto/
 - Popup окно
 - Лайки
 - Адаптивность
-- Vanila JS
 - Grid + Flex
-- BEM nested
 - Input validation
 - Close popups by ESC
+
+### Технологии и подходы
+
+- Vanila JS
+- ООП
+- ES6 модули
+- WebPack
+- Babel
+- BEM nested

@@ -5,14 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mesto</title>
-  <!-- <link rel="stylesheet" href="./pages/index.css" /> -->
 </head>
 
 <body class="body">
   <div class="page">
     <header class="header page__header">
 
-      <img src="<%=require('../images/logo-mesto.svg')%>" alt="Лого" class="header__logo" />
+      <img src="<%=require('./images/logo-mesto.svg')%>" alt="Лого" class="header__logo" />
     </header>
     <main class="main page__main">
       <section class="profile page__profile">
@@ -22,13 +21,13 @@
           <div class="profile__name-wrapper">
             <h1 class="profile__name">Sir de Muscaria</h1>
             <button class="button profile__edit-button" type="button">
-              <img src="<%=require('../images/edit-button.svg')%>" alt="Редактировать профиль"
+              <img src="<%=require('./images/edit-button.svg')%>" alt="Редактировать профиль"
                 class="profile__edit-icon" /></button>
           </div>
           <h2 class="profile__occupation">Mushroomer and forest adventurer</h2>
         </div>
         <button class="button button_type_add profile__new-card-button" type="button">
-          <img src="<%=require('../images/add-button.svg')%>" alt="добавить карточку"
+          <img src="<%=require('./images/add-button.svg')%>" alt="добавить карточку"
             class="profile__add-icon" /></button>
       </section>
       <section class="cards">
@@ -61,9 +60,11 @@
         <form class="popup__form" name="add-card" novalidate data-button-selector=".profile__new-card-button">
           <input class="input popup__name" name="name" id="popup__name-new-card" type="text" required
             placeholder="Название" minlength="2" maxlength="30" />
+          <!-- Это косяк дизайнеров и ТЗ. Я специально сделал больше места мемжду инпутами, чтобы текст ошибок в 2 строки не вызывал дергание высоты попапа. Мне как разработчику(и как пользователю) важно, чтобы не было всяких дерганий во время использования продукта -->
           <span class="popup__name-new-card-error message-error"></span>
           <input class="input popup__link" name="link" id="popup__link" type="url" required
             placeholder="Ссылка на картинку" />
+          <!-- Это косяк дизайнеров и ТЗ. Я специально сделал больше места мемжду инпутами, чтобы текст ошибок в 2 строки не вызывал дергание высоты попапа. Мне как разработчику(и как пользователю) важно, чтобы не было всяких дерганий во время использования продукта -->
           <span class="popup__link-error message-error"></span>
           <button type="submit" class="popup__save-button button">Создать</button>
         </form>
@@ -90,7 +91,6 @@
       </div>
     </li>
   </template>
-  <!-- <script type="module" src="./scripts/index.js"></script> -->
 </body>
 
 </html>
