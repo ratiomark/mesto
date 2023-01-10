@@ -1,5 +1,3 @@
-import { validationConfig } from "../utils/constants";
-
 class FormValidator {
   constructor({ inputSelector, buttonSelector, inputElemErrorClass }, form) {
     this._inputElemErrorClass = inputElemErrorClass;

@@ -7,9 +7,10 @@ import {
   inputNameSelector,
   inputOccupationSelector,
   listWithCards,
+  validationConfig
 } from "./utils/constants.js"
 import { Card } from "./scripts/Card.js";
-import { FormValidator, validationConfig } from "./scripts/FormValidator.js";
+import { FormValidator } from "./scripts/FormValidator.js";
 import { Section } from "./scripts/Section.js";
 import { PopupWithForm } from "./scripts/PopupWithForm.js";
 import { PopupWithImage } from './scripts/PopupWithImage.js';

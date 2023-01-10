@@ -60,14 +60,5 @@ const enableValidation = (config) => {
   })
 }
 
-export { resetValidationState, enableValidation, validationConfig }
+export { resetValidationState, enableValidation }
 
-
-
-// resetValidationState(popup) {
-//   const formElement = popup.querySelector('.popup__form');
-//   const inputList = formElement.querySelectorAll('.input');
-//   const buttonSubmit = popup.querySelector('.popup__save-button')
-//   inputList.forEach(inputElem => hideInputError(formElement, inputElem, 'input_error',))
-//   this._validateForm(inputList, buttonSubmit)
-// }
