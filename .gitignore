@@ -2,5 +2,5 @@ node_modules
 dist 
 styles
 BEMgeneratorFromCSS V2.py
-scripts/app.js
-scripts/validation.js
+src/scripts/app.js
+src/scripts/validation.js
