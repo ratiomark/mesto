@@ -4,14 +4,16 @@ export const formUpdateAvatar = document.querySelector('.popup_type_update-avata
 export const editProfileButton = document.querySelector('.profile__edit-button');
 export const newCardButton = document.querySelector('.profile__new-card-button');
 export const profileAvatarImage = document.querySelector('.profile__avatar');
+export const profileAvatarImageSelector = '.profile__avatar';
 export const profileNameElement = document.querySelector('.profile__name');
 export const profileOccupationElement = document.querySelector('.profile__occupation');
 export const inputPopupConfirmation = document.querySelector('#popup__remove-card');
 export const profileAvatar = document.querySelector('.profile__avatar-wrapper');
 export const inputNameSelector = '.profile__name'
+export const popupButtonConfirmationSelector = '.popup__confirmation-button'
 export const inputOccupationSelector = '.profile__occupation'
 export const cardTemplateSelector = "#card-item"
-export const listWithCards = ".cards__list";
+export const listWithCardsSelector = ".cards__list";
 export const validationConfig = {
   inputSelector: '.input',
   buttonSelector: '.popup__confirmation-button',

@@ -5,22 +5,20 @@ class Card {
     setLike,
     unsetLike,
     myId,
-    popupRemover,
-    inputPopupConfirmation) {
+    handleRemoveCard) {
     this._id = _id
     this._alt = name
     this._myId = myId
     this._link = link
     this._name = name
     this._setLike = setLike
+    this._ownerId = ownerId
     this._unsetLike = unsetLike
-    this._popupRemover = popupRemover
+    this._handleRemoveCard = handleRemoveCard
     this._handleCardClick = handleCardClick
     this._templateSelector = templateSelector
-    this._ownerId = ownerId === true ? myId : ownerId
-    this._inputPopupConfirmation = inputPopupConfirmation
     this._likesCount = likes.length != 0 ? likes.length : ""
-    this._isAlreadyLiked = likes.length != 0 ? likes.find(item => item["_id"] == myId) : false
+    this._isAlreadyLiked = likes.length != 0 ? likes.find(item => item["_id"] === myId) : false
   }
 
   _setTemplate() {
@@ -37,8 +35,6 @@ class Card {
     this._image.src = this._link;
     this._image.alt = this._alt;
     this._cardFromTemplate.querySelector(".card__title").textContent = this._name;
-    this._cardFromTemplate.dataset.id = this._id
-    this._cardFromTemplate.dataset.ownerId = this._ownerId
     this._cardCurrentCountLikes = this._cardFromTemplate.querySelector(".card__like-counter")
     this._cardCurrentCountLikes.textContent = this._likesCount;
     this._cardLikeButton = this._cardFromTemplate.querySelector(".card__like-button")
@@ -47,7 +43,7 @@ class Card {
 
   _setEventListeners() {
     if (this._ownerId === this._myId) {
-      this._cardFromTemplate.querySelector(".card__delete-icon").addEventListener('click', this._removeCard)
+      this._cardFromTemplate.querySelector(".card__delete-icon").addEventListener('click', this._removeCard.bind(this))
     } else {
       this._cardFromTemplate.querySelector('.card__delete-icon').remove()
     }
@@ -57,26 +53,21 @@ class Card {
     })
   }
 
-  _removeCard = () => {
-    this._inputPopupConfirmation.value = this._id
-    this._popupRemover.open()
+  _removeCard = (evt) => {
+    this._handleRemoveCard(this._id, this._cardFromTemplate)
   }
-
+  unlikeCardState() {
+    this._isAlreadyLiked = false
+  }
+  likeCardState() {
+    this._isAlreadyLiked = true
+  }
   _toggleLikeState = evt => {
     if (this._isAlreadyLiked) {
-      this._unsetLike(this._id)
-        .then(res => { this._cardCurrentCountLikes.textContent = res.likes?.length === 0 ? "" : res.likes.length })
-      evt.target.classList.remove('card__like-button_active')
-      this._isAlreadyLiked = false
+      this._unsetLike(this._id, this._cardCurrentCountLikes, evt.target, this.unlikeCardState.bind(this))
       return
     }
-    this._setLike(this._id)
-      .then(res => {
-        return res
-      })
-      .then(res => { this._cardCurrentCountLikes.textContent = res.likes?.length === 0 ? "" : res.likes.length })
-    evt.target.classList.add('card__like-button_active')
-    this._isAlreadyLiked = true
+    this._setLike(this._id, this._cardCurrentCountLikes, evt.target, this.likeCardState.bind(this))
   };
 
   getCardHTML() {

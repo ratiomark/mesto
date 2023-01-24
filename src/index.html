@@ -47,7 +47,7 @@
           <input placeholder="Имя" class="input popup__name" name="name" id="popup__name" type="text" required
             minlength="2" maxlength="40" />
           <span class="popup__name-error message-error"></span>
-          <input placeholder="Род деятельности" name="occupation" class="input popup__occupation" id="popup__occupation"
+          <input placeholder="Род деятельности" name="about" class="input popup__occupation" id="popup__occupation"
             type="text" required minlength="2" maxlength="200" />
           <span class="popup__occupation-error message-error"></span>
           <button type="submit" class="popup__confirmation-button button">Сохранить</button>
@@ -60,7 +60,6 @@
       <div class="popup__container">
         <h4 class="popup__title popup__title_confirmation">Вы уверены?</h4>
         <form class="popup__form" name="removeCard" novalidate data-button-selector=".profile__edit-button">
-          <input name="remove-card" class="input input_hidden" id="popup__remove-card" />
           <button type="submit" class="popup__confirmation-button button">Да</button>
         </form>
         <button type="button" class="popup__close-button button"></button>

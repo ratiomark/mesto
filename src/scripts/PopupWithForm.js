@@ -7,7 +7,8 @@ export class PopupWithForm extends Popup {
     this._submitHandler = submitHandler;
     this._form = this._popup.querySelector('.popup__form')
     this._inputs = this._popup.querySelectorAll('input')
-    this.submitButton = this._popup.querySelector('[type=Submit]')
+    this._submitButton = this._popup.querySelector('[type=Submit]')
+    this._defaultButtonText = this._submitButton.textContent
   }
   _getInputValues() {
     const inputValueObject = {}
@@ -23,6 +24,12 @@ export class PopupWithForm extends Popup {
       event.preventDefault()
       this._submitHandler(this._getInputValues())
     })
+  }
+  setButtonStateIsLoading() {
+    this._submitButton.textContent = "В процессе..."
+  }
+  unsetButtonStateIsLoading() {
+    this._submitButton.textContent = this._defaultButtonText
   }
   close() {
     super.close()
