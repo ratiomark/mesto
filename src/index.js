@@ -8,9 +8,7 @@ import {
   inputOccupationSelector,
   listWithCardsSelector,
   validationConfig,
-  inputPopupConfirmation,
   profileAvatar,
-  profileAvatarImage,
   profileAvatarImageSelector,
   popupButtonConfirmationSelector,
   cardTemplateSelector,
@@ -74,7 +72,6 @@ const setLike = (cardID, cardCurrentCountLikes, target, drawLike) => {
     .then(res => {
       cardCurrentCountLikes.textContent = res.likes?.length === 0 ? "" : res.likes.length
       target.classList.add('card__like-button_active')
-      // alreadyLiked = true
       drawLike()
     })
     .catch(apiHandleErrorBound)
@@ -89,10 +86,6 @@ const unsetLike = (cardID, cardCurrentCountLikes, target, alreadyLiked) => {
     })
     .catch(apiHandleErrorBound)
 }
-// this._unsetLike(this._id, this._cardCurrentCountLikes, evt.target, alreadyLiked)
-// evt.target
-// this._isAlreadyLiked = false
-// return
 
 const cardsUploader = new Section({
   containerSelector: listWithCardsSelector,
@@ -141,7 +134,6 @@ const popupEditProfile = new PopupWithForm({
         userInfoController.setUserInfo(inputValuesObject)
         popupEditProfile.close()
       })
-      // .then(popupEditProfile.close())
       .catch(apiHandleErrorBound)
       .finally(popupEditProfile.unsetButtonStateIsLoading())
   }
@@ -154,7 +146,7 @@ const popupUpdateAvatar = new PopupWithForm({
     const link = inputValuesObject['linkToNewAvatar']
     const updateAvatarRequest = api.updateAvatar.bind(api)
     updateAvatarRequest(link)
-      .then(res => profileAvatarImage.updateAvatar({ avatar: res.avatar }))
+      .then(res => userInfoController.setUserImage({ avatar: res.avatar }))
       .then(popupUpdateAvatar.close())
       .catch(apiHandleErrorBound)
       .finally(popupUpdateAvatar.unsetButtonStateIsLoading())
