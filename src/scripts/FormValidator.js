@@ -30,8 +30,8 @@ class FormValidator {
     return Array.from(inputList).some(inputElem => !inputElem.validity.valid)
   }
 
-  _validateForm(inputList) {
-    if (this._hasInvalidInput(inputList)) {
+  _validateForm() {
+    if (this._hasInvalidInput(this._inputList)) {
       this._buttonSubmit.disabled = true;
     } else {
       this._buttonSubmit.disabled = false;
@@ -49,7 +49,7 @@ class FormValidator {
 
   resetValidationState() {
     this._inputList.forEach(inputElem => this._hideInputError(inputElem, this._inputElemErrorClass))
-    this._validateForm(this._inputList, this._buttonSubmit)
+    this._validateForm()
   }
 
   enableValidation() {
