@@ -7,12 +7,12 @@ class PopupWithConfirmation extends Popup {
     this._form = this._popup.querySelector('form')
     this._defaultButtonText = this._submitButton.textContent
   }
-  setData(id, cardToDelete) {
+  setData(id, removeFromDOM) {
     this._idToDelete = id
-    this._cardToDelete = cardToDelete
+    this._removeFromDOM = removeFromDOM
   }
   getData() {
-    return { id: this._idToDelete, cardToDelete: this._cardToDelete }
+    return { id: this._idToDelete, removeFromDOM: this._removeFromDOM }
   }
 
   setButtonStateIsLoading() {

@@ -19,6 +19,7 @@ class Card {
     this._templateSelector = templateSelector
     this._likesCount = likes.length != 0 ? likes.length : ""
     this._isAlreadyLiked = likes.length != 0 ? likes.find(item => item["_id"] === myId) : false
+    this.toggleCardLikeStateBound = this.toggleCardLikeState.bind(this)
   }
 
   _setTemplate() {
@@ -53,22 +54,26 @@ class Card {
     })
   }
 
-  _removeCard = (evt) => {
-    this._handleRemoveCard(this._id, this._cardFromTemplate)
+  _removeCard = () => {
+    this._handleRemoveCard(this._id, this.removeFromDOM.bind(this))
   }
-  unlikeCardState() {
-    this._isAlreadyLiked = false
+
+  toggleCardLikeState() {
+    this._cardLikeButton.classList.toggle('card__like-button_active')
+    this._isAlreadyLiked = !this._isAlreadyLiked
   }
-  likeCardState() {
-    this._isAlreadyLiked = true
-  }
-  _toggleLikeState = evt => {
+
+  _toggleLikeState = () => {
     if (this._isAlreadyLiked) {
-      this._unsetLike(this._id, this._cardCurrentCountLikes, evt.target, this.unlikeCardState.bind(this))
+      this._unsetLike(this._id, this._cardCurrentCountLikes, this.toggleCardLikeStateBound)
       return
     }
-    this._setLike(this._id, this._cardCurrentCountLikes, evt.target, this.likeCardState.bind(this))
+    this._setLike(this._id, this._cardCurrentCountLikes, this.toggleCardLikeStateBound)
   };
+
+  removeFromDOM() {
+    this._cardFromTemplate.remove()
+  }
 
   getCardHTML() {
     this._setTemplate()

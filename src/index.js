@@ -53,9 +53,9 @@ const popupRemoveCard = new PopupWithConfirmation({
   submitHandler: (evt) => {
     evt.preventDefault()
     popupRemoveCard.setButtonStateIsLoading()
-    const { id, cardToDelete } = popupRemoveCard.getData()
+    const { id, removeFromDOM } = popupRemoveCard.getData()
     api.deleteCard(id)
-      .then(cardToDelete.remove())
+      .then(removeFromDOM())
       .then(popupRemoveCard.close())
       .catch(apiHandleErrorBound)
       .finally(popupRemoveCard.unsetButtonStateIsLoading())
@@ -67,22 +67,20 @@ popupRemoveCard.setEventListeners()
 const showCard = cardDataObject => {
   popupShowCard.open(cardDataObject)
 }
-const setLike = (cardID, cardCurrentCountLikes, target, drawLike) => {
+const setLike = (cardID, cardCurrentCountLikes, toggleCardLikeState) => {
   api.setLike(cardID)
     .then(res => {
       cardCurrentCountLikes.textContent = res.likes?.length === 0 ? "" : res.likes.length
-      target.classList.add('card__like-button_active')
-      drawLike()
+      toggleCardLikeState()
     })
     .catch(apiHandleErrorBound)
 }
 
-const unsetLike = (cardID, cardCurrentCountLikes, target, alreadyLiked) => {
+const unsetLike = (cardID, cardCurrentCountLikes, toggleCardLikeState) => {
   api.unsetLike(cardID)
     .then(res => {
       cardCurrentCountLikes.textContent = res.likes?.length === 0 ? "" : res.likes.length
-      target.classList.remove('card__like-button_active')
-      alreadyLiked()
+      toggleCardLikeState()
     })
     .catch(apiHandleErrorBound)
 }
@@ -96,9 +94,9 @@ const cardsUploader = new Section({
       setLike,
       unsetLike,
       myId,
-      (id, cardElement) => {
+      (id, removeFromDOM) => {
         popupRemoveCard.open()
-        popupRemoveCard.setData(id, cardElement)
+        popupRemoveCard.setData(id, removeFromDOM)
       })
     cardsUploader.addItemToEnd(card)
   }
@@ -127,11 +125,11 @@ const popupEditProfile = new PopupWithForm({
   popupSelector: '.popup_type_edit-profile',
   submitHandler: (inputValuesObject) => {
     popupEditProfile.setButtonStateIsLoading()
-    const editProfileRequest = api.editProfile.bind(api)
     const { name, about } = inputValuesObject
-    editProfileRequest({ name, about })
-      .then(() => {
-        userInfoController.setUserInfo(inputValuesObject)
+    // это странно, последний код, который я отправил не содержал editProfileRequest = api.editProfile.bind(api), но на ревью вы мне отметили этот момент. Я полез в код, а там нет такого, там как у меня сейчас, странно...
+    api.editProfile({ name, about })
+      .then((res) => {
+        userInfoController.setUserInfo(res)
         popupEditProfile.close()
       })
       .catch(apiHandleErrorBound)
@@ -144,9 +142,8 @@ const popupUpdateAvatar = new PopupWithForm({
   submitHandler: (inputValuesObject) => {
     popupUpdateAvatar.setButtonStateIsLoading()
     const link = inputValuesObject['linkToNewAvatar']
-    const updateAvatarRequest = api.updateAvatar.bind(api)
-    updateAvatarRequest(link)
-      .then(res => userInfoController.setUserImage({ avatar: res.avatar }))
+    api.updateAvatar(link)
+      .then(res => userInfoController.setUserImage(res))
       .then(popupUpdateAvatar.close())
       .catch(apiHandleErrorBound)
       .finally(popupUpdateAvatar.unsetButtonStateIsLoading())
@@ -166,9 +163,9 @@ const popupAddNewCard = new PopupWithForm({
           setLike,
           unsetLike,
           myId,
-          (id, cardElement) => {
+          (id, removeFromDOM) => {
             popupRemoveCard.open()
-            popupRemoveCard.setData(id, cardElement)
+            popupRemoveCard.setData(id, removeFromDOM)
           })
         return card
       })

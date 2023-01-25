@@ -16,12 +16,10 @@ export class Api {
   getUserData() {
     return fetch(`${this.baseURL}/users/me`, { headers: this.headers })
       .then(this.handleFirstResponse)
-      .catch(this.handleError)
   }
   getInitialCard() {
     return fetch(`${this.baseURL}/cards`, { headers: this.headers })
       .then(this.handleFirstResponse)
-      .catch(this.handleError)
   }
   editProfile({name, about}) {
     return fetch(`${this.baseURL}/users/me`, {
@@ -33,7 +31,6 @@ export class Api {
       })
     })
       .then(this.handleFirstResponse)
-      .catch(this.handleError)
   }
 
   deleteCard(id) {
@@ -42,7 +39,6 @@ export class Api {
       headers: this.headers,
     })
       .then(this.handleFirstResponse)
-      .catch(this.handleError)
   }
 
   addCardRequest({ name, link }) {
@@ -55,7 +51,6 @@ export class Api {
       })
     })
       .then(this.handleFirstResponse)
-      .catch(this.handleError)
   }
   updateAvatar(avatar) {
     return fetch(`${this.baseURL}/users/me/avatar`, {
@@ -66,7 +61,6 @@ export class Api {
       })
     })
       .then(this.handleFirstResponse)
-      .catch(this.handleError)
   }
   setLike(id) {
     return fetch(`${this.baseURL}/cards/${id}/likes`, {
@@ -74,7 +68,6 @@ export class Api {
       headers: this.headers,
     })
       .then(this.handleFirstResponse)
-      .catch(this.handleError)
   }
   unsetLike(id) {
     return fetch(`${this.baseURL}/cards/${id}/likes`, {
@@ -82,6 +75,5 @@ export class Api {
       headers: this.headers,
     })
       .then(this.handleFirstResponse)
-      .catch(this.handleError)
   }
 }
