@@ -67,21 +67,15 @@ popupRemoveCard.setEventListeners()
 const showCard = cardDataObject => {
   popupShowCard.open(cardDataObject)
 }
-const setLike = (cardID, cardCurrentCountLikes, toggleCardLikeState) => {
+const setLike = (cardID, toggleCardLikeState) => {
   api.setLike(cardID)
-    .then(res => {
-      cardCurrentCountLikes.textContent = res.likes?.length === 0 ? "" : res.likes.length
-      toggleCardLikeState()
-    })
+    .then(toggleCardLikeState)
     .catch(apiHandleErrorBound)
 }
 
-const unsetLike = (cardID, cardCurrentCountLikes, toggleCardLikeState) => {
+const unsetLike = (cardID, toggleCardLikeState) => {
   api.unsetLike(cardID)
-    .then(res => {
-      cardCurrentCountLikes.textContent = res.likes?.length === 0 ? "" : res.likes.length
-      toggleCardLikeState()
-    })
+    .then(toggleCardLikeState)
     .catch(apiHandleErrorBound)
 }
 
@@ -171,12 +165,10 @@ const popupAddNewCard = new PopupWithForm({
       })
       .then(card => {
         cardsUploader.addItem(card)
-      })
-      .catch(apiHandleErrorBound)
-      .finally(() => {
-        popupAddNewCard.unsetButtonStateIsLoading()
         popupAddNewCard.close()
       })
+      .catch(apiHandleErrorBound)
+      .finally(popupAddNewCard.unsetButtonStateIsLoading())
   }
 });
 

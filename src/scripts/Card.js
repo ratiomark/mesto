@@ -58,17 +58,18 @@ class Card {
     this._handleRemoveCard(this._id, this.removeFromDOM.bind(this))
   }
 
-  toggleCardLikeState() {
+  toggleCardLikeState(response) {
+    this._cardCurrentCountLikes.textContent = response.likes?.length === 0 ? "" : response.likes.length
     this._cardLikeButton.classList.toggle('card__like-button_active')
     this._isAlreadyLiked = !this._isAlreadyLiked
   }
 
   _toggleLikeState = () => {
     if (this._isAlreadyLiked) {
-      this._unsetLike(this._id, this._cardCurrentCountLikes, this.toggleCardLikeStateBound)
+      this._unsetLike(this._id, this.toggleCardLikeStateBound)
       return
     }
-    this._setLike(this._id, this._cardCurrentCountLikes, this.toggleCardLikeStateBound)
+    this._setLike(this._id, this.toggleCardLikeStateBound)
   };
 
   removeFromDOM() {
